@@ -1,0 +1,25 @@
+# Игнорировать папку (важно: слэш в конце означает именно папку)
+temp/
+node_modules/
+venv/
+.venv/
+__pycache__/
+vendor/
+
+# Игнорировать переменные окружения
+.env
+.env.local
+.env.production
+
+# Игнорировать build
+dist/
+build/
+out/
+*.pyc
+*.class
+
+# Игнорировать кэш ОС и IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/settings.json

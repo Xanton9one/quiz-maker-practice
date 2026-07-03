@@ -22,7 +22,7 @@ TIMEOUT = 120.0
 DATA_LENGTH_LIMIT = 4000
 
 
-def build_prompt(text: str, quiz_type: str) -> str:
+def build_prompt(text: str, quiz_type: str, count_of_questions: str) -> str:
     format_instruction = """
     Если type == "quiz", формат:
     [{"question": "...", "options": ["...", "...", "...", "..."], "correct_answer": "..."}]
@@ -31,7 +31,7 @@ def build_prompt(text: str, quiz_type: str) -> str:
     [{"question": "Термин или вопрос?", "options": [], "correct_answer": "Подробный ответ"}]
     """
 
-    return f"""Ты — эксперт-преподаватель. Создай {quiz_type} из 5 вопросов на основе текста.
+    return f"""Ты — эксперт-преподаватель. Создай {quiz_type} из {count_of_questions} вопросов на основе текста.
     Верни СТРОГО валидный JSON-массив без markdown, без комментариев, без пояснений.
     {format_instruction}
 
@@ -43,7 +43,7 @@ def build_prompt(text: str, quiz_type: str) -> str:
 @app.post("/api/generate", response_model=GenerateResponse)
 async def generate_quiz(req: GenerateRequest):
     text = req.text[:DATA_LENGTH_LIMIT]
-    prompt = build_prompt(text, req.type)
+    prompt = build_prompt(text, req.type, req.count_of_questions)
 
     try:
         async with httpx.AsyncClient(timeout=TIMEOUT) as client:

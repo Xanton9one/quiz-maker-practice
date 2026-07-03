@@ -20,6 +20,7 @@ OLLAMA_URL = "http://localhost:11434/api/chat"
 MODEL = "qwen2.5:7b"
 TIMEOUT = 120.0
 DATA_LENGTH_LIMIT = 4000
+JSON_LENGTH_OUTPUT_LIMIT = 100
 
 
 def build_prompt(text: str, quiz_type: str, count_of_questions: str) -> str:
@@ -66,7 +67,7 @@ async def generate_quiz(req: GenerateRequest):
     except json.JSONDecodeError:
         raise HTTPException(
             status_code=500,
-            detail=f"Модель вернула невалидный JSON: {raw_content[:200]}",
+            detail=f"Модель вернула невалидный JSON: {raw_content[:JSON_LENGTH_OUTPUT_LIMIT]}",
         )
 
     if not isinstance(questions, list):

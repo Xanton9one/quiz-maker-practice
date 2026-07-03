@@ -3,8 +3,8 @@ import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.classes.GenerateRequest import GenerateRequest
-from backend.classes.GenerateResponse import GenerateResponse
+from classes.GenerateRequest import GenerateRequest
+from classes.GenerateResponse import GenerateResponse
 
 app = FastAPI(title="Quiz Generator API")
 

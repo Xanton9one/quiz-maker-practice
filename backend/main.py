@@ -2,8 +2,9 @@ import json
 import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Literal
+
+from backend.classes.GenerateRequest import GenerateRequest
+from backend.classes.GenerateResponse import GenerateResponse
 
 app = FastAPI(title="Quiz Generator API")
 
@@ -17,16 +18,8 @@ app.add_middleware(
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 MODEL = "qwen2.5:7b"
-
-
-class GenerateRequest(BaseModel):
-    text: str
-    type: Literal["quiz", "flashcard"]
-
-
-class GenerateResponse(BaseModel):
-    quiz_id: str  # Пока заглушка, позже заменим на UUID из БД
-    questions: list[dict]
+TIMEOUT = 120.0
+DATA_LENGTH_LIMIT = 4000
 
 
 def build_prompt(text: str, quiz_type: str) -> str:
@@ -37,22 +30,23 @@ def build_prompt(text: str, quiz_type: str) -> str:
     Если type == "flashcard", формат:
     [{"question": "Термин или вопрос?", "options": [], "correct_answer": "Подробный ответ"}]
     """
-    return f"""Ты — эксперт-преподаватель. Создай {quiz_type} из 5 вопросов на основе текста.
-Верни СТРОГО валидный JSON-массив без markdown, без комментариев, без пояснений.
-{format_instruction}
 
-Текст лекции:
-{text}
-"""
+    return f"""Ты — эксперт-преподаватель. Создай {quiz_type} из 5 вопросов на основе текста.
+    Верни СТРОГО валидный JSON-массив без markdown, без комментариев, без пояснений.
+    {format_instruction}
+
+    Текст лекции:
+    {text}
+    """
 
 
 @app.post("/api/generate", response_model=GenerateResponse)
 async def generate_quiz(req: GenerateRequest):
-    text = req.text[:4000]
+    text = req.text[:DATA_LENGTH_LIMIT]
     prompt = build_prompt(text, req.type)
 
     try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
+        async with httpx.AsyncClient(timeout=TIMEOUT) as client:
             response = await client.post(
                 OLLAMA_URL,
                 json={

@@ -1,0 +1,37 @@
+@reference "tailwindcss";
+
+.upload-zone {
+  @apply w-full max-w-[640px] h-[280px] bg-white/70 backdrop-blur-md border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 relative overflow-hidden;
+}
+
+.upload-zone:hover {
+  @apply border-indigo-500 shadow-[0_20px_40px_rgba(99,102,241,0.08)];
+}
+
+.upload-zone:active {
+  @apply scale-[0.99];
+}
+
+.upload-zone-gradient {
+  @apply absolute inset-0 bg-gradient-to-tr from-indigo-50/0 via-indigo-50/0 to-indigo-50/40 opacity-0 transition-opacity duration-300 pointer-events-none;
+}
+
+.upload-zone:hover .upload-zone-gradient {
+  @apply opacity-100;
+}
+
+.upload-zone-icon {
+  @apply w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-5 transition-transform duration-300 shadow-sm border border-indigo-100/50;
+}
+
+.upload-zone:hover .upload-zone-icon {
+  @apply -translate-y-1;
+}
+
+.upload-zone-title {
+  @apply text-slate-800 font-semibold text-lg tracking-tight;
+}
+
+.upload-zone-subtitle {
+  @apply text-slate-400 text-sm mt-1.5 font-medium;
+}

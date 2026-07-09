@@ -58,10 +58,11 @@ async def generate_quiz(req: GenerateRequest):
                 },
             )
             response.raise_for_status()
+            raw_content = response.json()["message"]["content"]
     except httpx.HTTPError as e:
         raise HTTPException(status_code=502, detail=f"Ollama error: {e}")
-
-    raw_content = response.json()["message"]["content"]
+    except KeyError:
+        raise HTTPException(status_code=500, detail="Неверный формат ответа от Ollama")
     try:
         questions = json.loads(raw_content)
     except json.JSONDecodeError:

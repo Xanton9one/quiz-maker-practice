@@ -12,6 +12,12 @@
   @apply text-3xl font-bold text-slate-900 mb-12 tracking-tight;
 }
 
+.error-indicator {
+    /*style={{color: 'red', textAlign: 'center'}}*/
+    @apply text-red-900;
+    text-align: center;
+}
+
 /* Стили для кнопки генерации */
 .generate-btn {
   @apply mt-10 px-10 py-4 rounded-2xl font-semibold tracking-wide text-base transition-all duration-300 active:scale-[0.98];

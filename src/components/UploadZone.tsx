@@ -1,8 +1,8 @@
-import { useState, useRef, ChangeEvent } from 'react';
-import '../styles/UploadZone.css'; 
+import { useState, useRef, type ChangeEvent } from 'react';
+import '../styles/UploadZone.css';
 
 interface UploadZoneProps {
-  onFileSelect: (fileName: string) => void;
+  onFileSelect: (file: File) => void;
 }
 
 export const UploadZone = ({ onFileSelect }: UploadZoneProps) => {
@@ -17,7 +17,7 @@ export const UploadZone = ({ onFileSelect }: UploadZoneProps) => {
     const file = event.target.files?.[0];
     if (file) {
       setFileName(file.name);
-      onFileSelect(file.name);
+      onFileSelect(file);
     }
   };
 

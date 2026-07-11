@@ -81,16 +81,24 @@ function App() {
           <div className="quiz-screen-container">
             <h2 className="quiz-main-title">Тест по лекции</h2>
 
-            {/*mapping по всем вопросам*/}
+            {/* Mapping по всем вопросам */}
 
             {questions.map((q, index) => (
             <QuizCard
                 key={index}
                 question={q.question}
                 options={q.options}
+                correctAnswer={q.correct_answer}
                 onSelect={(opt) => console.log(`Вопрос ${index + 1}. Выбран ответ:`, opt)}
             />
             ))}
+
+            <button
+                onClick={() => setCurrentScreen('upload')}
+                className="generate-btn generate-btn-active generate-btn-alt-lecture"
+            >
+              ← Загрузить другую лекцию
+            </button>
 
           </div>
         )}

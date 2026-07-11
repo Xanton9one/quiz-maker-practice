@@ -45,6 +45,7 @@ def build_prompt(text: str, quiz_type: str, count_of_questions: str) -> str:
 async def generate_quiz(req: GenerateRequest):
     text = req.text[:DATA_LENGTH_LIMIT]
     prompt = build_prompt(text, req.type, req.count_of_questions)
+    raw_content = {}
 
     try:
         async with httpx.AsyncClient(timeout=TIMEOUT) as client:
@@ -61,10 +62,9 @@ async def generate_quiz(req: GenerateRequest):
             raw_content = response.json()["message"]["content"]
     except httpx.HTTPError as e:
         raise HTTPException(status_code=502, detail=f"Ollama error: {e}")
-    except KeyError:
-        raise HTTPException(status_code=500, detail="Неверный формат ответа от Ollama")
+
     try:
-        questions = json.loads(raw_content)
+        questions = json.loads(raw_content)['questions']
     except json.JSONDecodeError:
         raise HTTPException(
             status_code=500,

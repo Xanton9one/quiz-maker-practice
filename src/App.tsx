@@ -38,12 +38,11 @@ function App() {
         }),
       });
 
-      if (!response.ok) {
-        const errData = await response.json();
-        setError(errData.detail || "Ошибка генерации");
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.detail || "Ошибка генерации");
+      }
 
       setQuestions(data.questions);
       setCurrentScreen('quiz');
